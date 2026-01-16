@@ -26,6 +26,10 @@ export async function createTestApp(): Promise<{ app: Application; dataSource: D
 
   await dataSource.initialize();
 
+  // Override the AppDataSource for tests
+  const dataSourceModule = require("../src/data-source");
+  Object.assign(dataSourceModule.AppDataSource, dataSource);
+
   const app = express();
   app.use(helmet());
   app.use(cors());

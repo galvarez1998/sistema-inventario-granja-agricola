@@ -11,16 +11,16 @@ export class Production {
   @Column()
   tipo!: "huevos" | "miel" | "peso"; // peso = ganancia de peso animales
 
-  @Column({ type: "date" })
+  @Column({ type: "varchar" })
   fecha!: string;
 
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "integer", nullable: true })
   cantidadHuevos?: number | null;
 
-  @Column({ type: "float", nullable: true })
+  @Column({ type: "real", nullable: true })
   cantidadMiel?: number | null;
 
-  @Column({ type: "float", nullable: true })
+  @Column({ type: "real", nullable: true })
   gananciaPeso?: number | null;
 
   @Column({ type: "text", nullable: true })

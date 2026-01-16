@@ -24,7 +24,7 @@ export class SalesService {
       const saleRepo = queryRunner.manager.getRepository(Sale);
 
       // Create sale
-      const sale = saleRepo.create(saleData);
+      const sale = saleRepo.create(saleData as any);
       await queryRunner.manager.save(sale);
 
       // Update inventory based on sale type

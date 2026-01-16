@@ -7,14 +7,14 @@ class ProductionController {
   static async create(req: Request, res: Response, next: NextFunction) {
     try {
       const repo = AppDataSource.getRepository(Production);
-      const p = repo.create(req.body);
+      const p = repo.create(req.body) as unknown as Production;
       await repo.save(p);
 
       if (p.tipo === "miel" && p.referencia) {
         const hiveRepo = AppDataSource.getRepository(Hive);
         const hive = await hiveRepo.findOneBy({ id: p.referencia });
-        if (hive) {
-          hive.ultimaProduccionLitros = p.cantidadMiel || 0;
+        if (hive && p.cantidadMiel) {
+          hive.ultimaProduccionLitros = p.cantidadMiel;
           await hiveRepo.save(hive);
         }
       }

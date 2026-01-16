@@ -23,7 +23,7 @@ export class InventoryService {
       const animalRepo = queryRunner.manager.getRepository(Animal);
 
       // Create movement
-      const movement = movementRepo.create(movementData);
+      const movement = movementRepo.create(movementData as any);
       await queryRunner.manager.save(movement);
 
       // Update inventory based on movement type

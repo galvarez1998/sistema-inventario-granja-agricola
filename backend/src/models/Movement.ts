@@ -14,12 +14,12 @@ export class Movement {
   @Column()
   especie!: string;
 
-  @Column({ type: "int", default: 0 })
+  @Column({ type: "integer", default: 0 })
   cantidad!: number;
 
   @Column({ type: "text", nullable: true })
   notas?: string;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   fecha!: Date;
 }
