@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
 
 /**
  * Animal entity: cerdos, gallinas, pollos, peces, abejas (colmenas)
@@ -11,19 +11,19 @@ export class Animal {
   @Column()
   especie!: string; // ej: cerdo, gallina, pollo, pez, colmena
 
-  @Column({ type: "date", nullable: true })
+  @Column({ type: "varchar", nullable: true })
   fechaIngreso!: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", nullable: true })
   edad!: string | null;
 
-  @Column({ type: "float", nullable: true })
+  @Column({ type: "real", nullable: true })
   peso!: number | null;
 
   @Column({ default: "saludable" })
   estado!: "saludable" | "enfermo" | "vendido" | "muerto";
 
-  @Column({ type: "int", default: 1 })
+  @Column({ type: "integer", default: 1 })
   cantidad!: number;
 
   @Column({ type: "text", nullable: true })
@@ -34,4 +34,7 @@ export class Animal {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

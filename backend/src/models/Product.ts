@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
 
 /**
  * Productos: carne, huevos, miel
@@ -12,39 +12,39 @@ export class Product {
   tipo!: "carne" | "huevo" | "miel";
 
   // carne fields
-  @Column({ nullable: true })
+  @Column({ type: "varchar", nullable: true })
   procedencia?: string; // cerdo, pollo, pez
 
-  @Column({ type: "float", nullable: true })
+  @Column({ type: "real", nullable: true })
   peso?: number | null;
 
-  @Column({ type: "date", nullable: true })
+  @Column({ type: "varchar", nullable: true })
   fechaSacrificio?: string | null;
 
-  @Column({ type: "date", nullable: true })
+  @Column({ type: "varchar", nullable: true })
   fechaCaducidad?: string | null;
 
   // huevos
-  @Column({ type: "int", nullable: true })
+  @Column({ type: "integer", nullable: true })
   cantidadHuevos?: number | null;
 
-  @Column({ type: "date", nullable: true })
+  @Column({ type: "varchar", nullable: true })
   fechaRecoleccion?: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", nullable: true })
   lote?: string | null;
 
   // miel
-  @Column({ nullable: true })
+  @Column({ type: "varchar", nullable: true })
   colmenaOrigen?: string | null;
 
-  @Column({ type: "float", nullable: true })
+  @Column({ type: "real", nullable: true })
   cantidadMiel?: number | null;
 
-  @Column({ type: "date", nullable: true })
+  @Column({ type: "varchar", nullable: true })
   fechaExtraccion?: string | null;
 
-  @Column({ nullable: true })
+  @Column({ type: "varchar", nullable: true })
   pureza?: string | null;
 
   @Column({ type: "text", nullable: true })
@@ -55,4 +55,7 @@ export class Product {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  @DeleteDateColumn()
+  deletedAt?: Date;
 }

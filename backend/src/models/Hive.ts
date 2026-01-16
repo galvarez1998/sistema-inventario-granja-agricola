@@ -11,7 +11,7 @@ export class Hive {
   @Column()
   nombre!: string;
 
-  @Column({ type: "float", default: 0 })
+  @Column({ type: "real", default: 0 })
   ultimaProduccionLitros!: number;
 
   @Column({ type: "text", nullable: true })

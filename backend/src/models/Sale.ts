@@ -14,13 +14,13 @@ export class Sale {
   @Column()
   referenciaId!: string; // productId o animalId
 
-  @Column({ type: "float" })
+  @Column({ type: "real" })
   precioTotal!: number;
 
-  @Column({ type: "int", default: 1 })
+  @Column({ type: "integer", default: 1 })
   cantidad!: number;
 
-  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   fecha!: Date;
 
   @Column({ type: "text", nullable: true })
