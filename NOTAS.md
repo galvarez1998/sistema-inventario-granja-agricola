@@ -1,0 +1,15 @@
+Extensiones sugeridas / próximos pasos
+- Reportes PDF/Excel:
+  - Usar exceljs para exportar tablas a Excel.
+  - Usar jsPDF o Puppeteer para generar PDFs de facturas.
+- Validaciones:
+  - Añadir DTOs + class-validator a controllers para sanitizar entrada.
+- Tests:
+  - Añadir tests (Jest + supertest).
+- Mejoras inventario:
+  - Implementar FIFO por lotes para productos perecibles.
+  - Agregar procesos asíncronos para alertas (email/SMS) cuando inventario bajo.
+- Seguridad:
+  - Rate limiting, CORS restringido, helmet configurado.
+- Despliegue:
+  - CI/CD con GitHub Actions: tests, build, migraciones y despliegue a Docker.
