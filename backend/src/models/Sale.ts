@@ -14,7 +14,7 @@ export class Sale {
   @Column()
   referenciaId!: string; // productId o animalId
 
-  @Column({ type: "float" })
+  @Column({ type: "decimal", precision: 10, scale: 2 })
   precioTotal!: number;
 
   @Column({ type: "int", default: 1 })

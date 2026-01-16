@@ -1,54 +1,26 @@
-import { Request, Response } from "express";
-import { AppDataSource } from "../data-source";
-import { Movement } from "../models/Movement";
-import { Animal } from "../models/Animal";
-import { Product } from "../models/Product";
+import { Request, Response, NextFunction } from "express";
+import { InventoryService } from "../services/inventory.service";
 
 class MovementsController {
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const repo = AppDataSource.getRepository(Movement);
-      const movement = repo.create(req.body);
-      await repo.save(movement);
-
-      // Update inventory side-effects: example for venta/muerte/compra/nacimiento
-      const animalRepo = AppDataSource.getRepository(Animal);
-      if (["venta", "muerte"].includes(movement.tipo)) {
-        // reduce animals of that species
-        const animals = await animalRepo.findBy({ especie: movement.especie });
-        // naive approach: reduce cantidad from first match
-        if (animals.length > 0) {
-          const a = animals[0];
-          a.cantidad = Math.max(0, a.cantidad - movement.cantidad);
-          await animalRepo.save(a);
-        }
-      } else if (movement.tipo === "nacimiento" || movement.tipo === "compra") {
-        // add animals
-        const animals = await animalRepo.findBy({ especie: movement.especie });
-        if (animals.length > 0) {
-          const a = animals[0];
-          a.cantidad = a.cantidad + movement.cantidad;
-          await animalRepo.save(a);
-        } else {
-          const newA = animalRepo.create({
-            especie: movement.especie,
-            cantidad: movement.cantidad,
-            estado: "saludable"
-          });
-          await animalRepo.save(newA);
-        }
-      }
-
+      const movement = await InventoryService.createMovementWithInventoryUpdate(req.body);
       res.status(201).json(movement);
     } catch (err) {
-      res.status(500).json({ error: err });
+      next(err);
     }
   }
 
-  static async list(req: Request, res: Response) {
-    const repo = AppDataSource.getRepository(Movement);
-    const all = await repo.find({ order: { fecha: "DESC" } });
-    res.json(all);
+  static async list(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { AppDataSource } = await import("../data-source");
+      const { Movement } = await import("../models/Movement");
+      const repo = AppDataSource.getRepository(Movement);
+      const all = await repo.find({ order: { fecha: "DESC" } });
+      res.json(all);
+    } catch (err) {
+      next(err);
+    }
   }
 }
 

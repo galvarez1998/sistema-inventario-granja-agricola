@@ -1,43 +1,26 @@
-import { Request, Response } from "express";
-import { AppDataSource } from "../data-source";
-import { Sale } from "../models/Sale";
-import { Product } from "../models/Product";
-import { Animal } from "../models/Animal";
+import { Request, Response, NextFunction } from "express";
+import { SalesService } from "../services/sales.service";
 
 class SalesController {
-  static async create(req: Request, res: Response) {
+  static async create(req: Request, res: Response, next: NextFunction) {
     try {
-      const repo = AppDataSource.getRepository(Sale);
-      const sale = repo.create(req.body);
-      await repo.save(sale);
-
-      // Deduct from inventory
-      if (sale.tipo === "producto") {
-        const prodRepo = AppDataSource.getRepository(Product);
-        const p = await prodRepo.findOneBy({ id: sale.referenciaId });
-        if (p) {
-          // For eggs or meat, remove or decrement quantity logic as appropriate
-          await prodRepo.delete(p.id);
-        }
-      } else if (sale.tipo === "animal") {
-        const animalRepo = AppDataSource.getRepository(Animal);
-        const a = await animalRepo.findOneBy({ id: sale.referenciaId });
-        if (a) {
-          a.cantidad = Math.max(0, a.cantidad - sale.cantidad);
-          await animalRepo.save(a);
-        }
-      }
-
+      const sale = await SalesService.createSaleWithInventoryUpdate(req.body);
       res.status(201).json(sale);
     } catch (err) {
-      res.status(500).json({ error: err });
+      next(err);
     }
   }
 
-  static async list(req: Request, res: Response) {
-    const repo = AppDataSource.getRepository(Sale);
-    const all = await repo.find({ order: { fecha: "DESC" } });
-    res.json(all);
+  static async list(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { AppDataSource } = await import("../data-source");
+      const { Sale } = await import("../models/Sale");
+      const repo = AppDataSource.getRepository(Sale);
+      const all = await repo.find({ order: { fecha: "DESC" } });
+      res.json(all);
+    } catch (err) {
+      next(err);
+    }
   }
 }
 

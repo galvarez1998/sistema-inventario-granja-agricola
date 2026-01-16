@@ -8,6 +8,7 @@ import { AppDataSource } from "./data-source";
 import routes from "./routes";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./docs/swagger";
+import { errorMiddleware } from "./middlewares/error.middleware";
 
 const PORT = process.env.PORT || 4000;
 
@@ -23,6 +24,9 @@ async function start() {
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
   app.get("/", (req, res) => res.json({ ok: true, version: "1.0" }));
+
+  // Error middleware must be last
+  app.use(errorMiddleware);
 
   app.listen(PORT, () => {
     console.log(`Server listening on http://localhost:${PORT}`);
