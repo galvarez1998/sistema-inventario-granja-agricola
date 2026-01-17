@@ -31,20 +31,50 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-xl mb-4">Ingresar</h2>
-        <div className="mb-4">
-          <label className="block mb-1">Usuario</label>
-          <input {...register("username")} className="w-full border p-2 rounded" />
-          {formState.errors.username && <p className="text-red-600">{formState.errors.username.message}</p>}
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-bold text-green-700 mb-2">🌾</h1>
+          <h2 className="text-2xl font-semibold text-gray-800">Sistema de Inventario</h2>
+          <p className="text-gray-500 text-sm mt-2">Granja Agrícola</p>
         </div>
-        <div className="mb-4">
-          <label className="block mb-1">Contraseña</label>
-          <input type="password" {...register("password")} className="w-full border p-2 rounded" />
-          {formState.errors.password && <p className="text-red-600">{formState.errors.password.message}</p>}
+
+        <div className="mb-5">
+          <label className="block text-sm font-medium text-gray-700 mb-2 text-center">Usuario</label>
+          <input 
+            {...register("username")} 
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition text-center"
+            placeholder="usuario"
+          />
+          {formState.errors.username && (
+            <p className="text-red-500 text-sm mt-1 text-center">{formState.errors.username.message}</p>
+          )}
         </div>
-        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">Entrar</button>
+
+        <div className="mb-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2 text-center">Contraseña</label>
+          <input 
+            type="password" 
+            {...register("password")} 
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent outline-none transition text-center"
+            placeholder="••••••••"
+          />
+          {formState.errors.password && (
+            <p className="text-red-500 text-sm mt-1 text-center">{formState.errors.password.message}</p>
+          )}
+        </div>
+
+        <button 
+          type="submit" 
+          disabled={formState.isSubmitting}
+          className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 disabled:opacity-50"
+        >
+          {formState.isSubmitting ? "Ingresando..." : "Entrar"}
+        </button>
+
+        <p className="text-center text-gray-500 text-xs mt-6">
+          © 2026 Sistema de Inventario Granja
+        </p>
       </form>
     </div>
   );

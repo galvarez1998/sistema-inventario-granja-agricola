@@ -4,6 +4,8 @@ import LoginPage from "./features/auth/Login";
 import Dashboard from "./pages/Dashboard";
 import AnimalList from "./features/animals/AnimalList";
 import AnimalForm from "./features/animals/AnimalForm";
+import Layout from "./components/Layout";
+import Header from "./components/Header";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
 import { Toaster } from "react-hot-toast";
 
@@ -11,49 +13,51 @@ function ProtectedRoute({ children, roles }: { children: JSX.Element; roles?: st
   const { user } = useAuth();
   if (!user) return <Navigate to="/login" replace />;
   if (roles && !roles.includes(user.role)) return <Navigate to="/" replace />;
-  return children;
+  return <Layout>{children}</Layout>;
 }
 
 export default function App() {
   return (
     <AuthProvider>
-      <Toaster />
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/animals"
-          element={
-            <ProtectedRoute>
-              <AnimalList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/animals/new"
-          element={
-            <ProtectedRoute roles={["admin", "worker"]}>
-              <AnimalForm />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/animals/:id/edit"
-          element={
-            <ProtectedRoute roles={["admin", "worker"]}>
-              <AnimalForm />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <div style={{ minHeight: "100vh", backgroundColor: "#f3f4f6" }}>
+        <Toaster />
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/animals"
+            element={
+              <ProtectedRoute>
+                <AnimalList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/animals/new"
+            element={
+              <ProtectedRoute roles={["admin", "worker"]}>
+                <AnimalForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/animals/:id/edit"
+            element={
+              <ProtectedRoute roles={["admin", "worker"]}>
+                <AnimalForm />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
     </AuthProvider>
   );
 }

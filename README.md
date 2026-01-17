@@ -33,7 +33,7 @@ Instalación (backend)
 5. Correr el servidor:
    - npm run dev
 6. Swagger UI:
-   - http://localhost:4000/docs
+   - http://localhost:3000/docs
 
 Instalación (frontend)
 1. cd frontend
