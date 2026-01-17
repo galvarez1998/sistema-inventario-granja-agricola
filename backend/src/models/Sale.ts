@@ -20,7 +20,7 @@ export class Sale {
   @Column({ type: "integer", default: 1 })
   cantidad!: number;
 
-  @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   fecha!: Date;
 
   @Column({ type: "text", nullable: true })

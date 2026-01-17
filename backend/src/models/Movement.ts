@@ -20,6 +20,6 @@ export class Movement {
   @Column({ type: "text", nullable: true })
   notas?: string;
 
-  @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
+  @Column({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
   fecha!: Date;
 }

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 /**
  * Productos: carne, huevos, miel
@@ -55,7 +55,4 @@ export class Product {
 
   @UpdateDateColumn()
   updatedAt!: Date;
-
-  @DeleteDateColumn()
-  deletedAt?: Date;
 }
