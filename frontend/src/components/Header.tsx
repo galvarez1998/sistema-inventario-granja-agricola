@@ -18,6 +18,7 @@ export default function Header() {
     { label: "📈 Producción", path: "/production" },
     { label: "💰 Ventas", path: "/sales" },
     { label: "📋 Movimientos", path: "/movements" },
+    { label: "🐝 Colmenas", path: "/hives" },
   ];
 
   return (

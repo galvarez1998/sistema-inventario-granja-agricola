@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,14 @@ type FormData = z.infer<typeof schema>;
 export default function LoginPage() {
   const { register, handleSubmit, formState } = useForm<FormData>({ resolver: zodResolver(schema) });
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, user } = useAuth();
+
+  // Navegar al Dashboard cuando el usuario esté autenticado
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+  }, [user, navigate]);
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -24,7 +31,7 @@ export default function LoginPage() {
       const { token } = res.data;
       await login(token);
       toast.success("Ingreso correcto");
-      navigate("/");
+      // El useEffect cuidará la navegación
     } catch (err: any) {
       toast.error(err?.response?.data?.message || "Error de login");
     }

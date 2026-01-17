@@ -13,21 +13,29 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  const [token, setToken] = useState<string | null>(() => {
+    // Recupera el token del localStorage al inicializar
+    return localStorage.getItem("token");
+  });
   const [user, setUser] = useState<User>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
+  // Efecto para inicializar el usuario desde el token al cargar
   useEffect(() => {
     if (token) {
-      // Optional: fetch user profile from token or backend
       try {
         const payload = JSON.parse(atob(token.split(".")[1]));
         setUser({ id: payload.id, username: payload.username, role: payload.role });
-      } catch {
+      } catch (error) {
+        console.error("Error decoding token:", error);
         setUser(null);
+        localStorage.removeItem("token");
+        setToken(null);
       }
     } else {
       setUser(null);
     }
+    setIsInitialized(true);
   }, [token]);
 
   const login = async (newToken: string) => {
@@ -41,7 +49,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setUser(null);
   };
 
-  return <AuthContext.Provider value={{ user, token, login, logout }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, token, login, logout }}>
+      {isInitialized ? children : <div style={{ padding: "1rem" }}>Cargando...</div>}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = () => {

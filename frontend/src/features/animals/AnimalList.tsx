@@ -1,27 +1,30 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import API from "../../api/api";
+import { animalsService, Animal } from "../../api/animalsService";
 import { Link } from "react-router-dom";
-
-type Animal = {
-  id: string;
-  especie: string;
-  cantidad: number;
-  estado: string;
-  peso?: number;
-  fechaIngreso?: string;
-};
+import toast from "react-hot-toast";
 
 async function fetchAnimals(): Promise<Animal[]> {
-  const res = await API.get("/animals");
-  return res.data;
+  return animalsService.list();
 }
 
 export default function AnimalList() {
-  const { data, isLoading, error, refetch } = useQuery(["animals"], fetchAnimals);
+  const { data, isLoading, error, refetch } = useQuery<Animal[]>(["animals"], fetchAnimals);
 
   if (isLoading) return <div className="p-4">Cargando animales...</div>;
   if (error) return <div className="p-4 text-red-600">Error al cargar</div>;
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm("¿Seguro que deseas eliminar este animal?")) {
+      try {
+        await animalsService.remove(id);
+        toast.success("Animal eliminado");
+        refetch();
+      } catch {
+        toast.error("Error al eliminar");
+      }
+    }
+  };
 
   return (
     <div className="p-6">
@@ -35,8 +38,10 @@ export default function AnimalList() {
           <tr>
             <th className="border px-4 py-2">Especie</th>
             <th className="border px-4 py-2">Cantidad</th>
-            <th className="border px-4 py-2">Estado</th>
             <th className="border px-4 py-2">Peso (kg)</th>
+            <th className="border px-4 py-2">Edad</th>
+            <th className="border px-4 py-2">Estado</th>
+            <th className="border px-4 py-2">F. Ingreso</th>
             <th className="border px-4 py-2">Acciones</th>
           </tr>
         </thead>
@@ -45,11 +50,13 @@ export default function AnimalList() {
             <tr key={a.id}>
               <td className="border px-4 py-2">{a.especie}</td>
               <td className="border px-4 py-2">{a.cantidad}</td>
-              <td className="border px-4 py-2">{a.estado}</td>
               <td className="border px-4 py-2">{a.peso ?? "-"}</td>
+              <td className="border px-4 py-2">{a.edad ?? "-"}</td>
+              <td className="border px-4 py-2 capitalize">{a.estado}</td>
+              <td className="border px-4 py-2">{a.fechaIngreso ? new Date(a.fechaIngreso).toLocaleDateString() : "-"}</td>
               <td className="border px-4 py-2">
                 <Link to={`/animals/${a.id}/edit`} className="text-blue-600 mr-2">Editar</Link>
-                <button onClick={() => { /* eliminar */ }} className="text-red-600">Eliminar</button>
+                <button onClick={() => handleDelete(a.id)} className="text-red-600">Eliminar</button>
               </td>
             </tr>
           ))}

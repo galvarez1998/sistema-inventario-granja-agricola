@@ -1,5 +1,18 @@
 import API from "./api";
 
+export type Animal = {
+  id: string;
+  especie: string;
+  fechaIngreso: string | null;
+  edad: string | null;
+  peso: number | null;
+  estado: "saludable" | "enfermo" | "vendido" | "muerto";
+  cantidad: number;
+  observaciones?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
 export const animalsService = {
   list: async () => {
     const r = await API.get("/animals");
